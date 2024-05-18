@@ -2,6 +2,7 @@
 
 namespace ZamazorWeb.Models
 {
+    //Create model named "Category"
     public class Category
     {
         [Key]
