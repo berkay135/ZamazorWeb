@@ -18,5 +18,11 @@ namespace ZamazorWeb.Controllers
             List<Category> objCategoryList = _db.Categories.ToList();
             return View(objCategoryList);
         }
+
+        //Implementation of Create button
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
