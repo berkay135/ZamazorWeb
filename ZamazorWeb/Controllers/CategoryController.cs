@@ -20,9 +20,21 @@ namespace ZamazorWeb.Controllers
         }
 
         //Implementation of Create button
+        //GET
         public IActionResult Create()
         {
             return View();
         }
-    }
+
+        //Adding new row in database
+        //POST
+        [HttpPost]
+		public IActionResult Create(Category obj)
+		{
+            //
+            _db.Categories.Add(obj);
+            _db.SaveChanges();
+			return RedirectToAction("Index");
+		}
+	}
 }
