@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Zamazor.DataAccess.Repos;
+using Zamazor.DataAccess.Repos.IRepository;
 using ZamazorWeb.DataAccess.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,8 @@ builder.Services.AddControllersWithViews();
 // Register entity framework
 builder.Services.AddDbContext<ApplicationDbContext>(options=> 
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 var app = builder.Build();
