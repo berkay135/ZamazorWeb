@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Zamazor.Models;
 
 namespace Zamazor.DataAccess.Repos.IRepository
 {
-	public interface IUnitOfWork
-	{
-
-		ICategoryRepository Category { get; }
-		IProductRepository Product { get; }
-
-		void Save();
-	}
+    public interface IProductRepository : IRepository<Product>
+    {
+        void Update(Product obj);
+    }
 }
