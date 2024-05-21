@@ -7,7 +7,7 @@ using ZamazorWeb.DataAccess.Data;
 
 #nullable disable
 
-namespace ZamazorWeb.DataAccess.Migrations
+namespace Zamazor.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -21,7 +21,7 @@ namespace ZamazorWeb.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ZamazorWeb.Models.Category", b =>
+            modelBuilder.Entity("Zamazor.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,7 +34,8 @@ namespace ZamazorWeb.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
