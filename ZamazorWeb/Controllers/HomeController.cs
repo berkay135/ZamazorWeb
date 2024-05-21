@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using ZamazorWeb.Models;
+using Zamazor.Models;
 
 namespace ZamazorWeb.Controllers
 {

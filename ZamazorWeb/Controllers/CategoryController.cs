@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ZamazorWeb.Data;
-using ZamazorWeb.Models;
+using Zamazor.Models;
+using ZamazorWeb.DataAccess.Data;
 
 namespace ZamazorWeb.Controllers
 {

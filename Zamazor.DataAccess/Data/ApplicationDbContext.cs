@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ZamazorWeb.Models;
+using Zamazor.Models;
 
-namespace ZamazorWeb.Data
+namespace ZamazorWeb.DataAccess.Data
 {
     //Configuration for entity framework core
     public class ApplicationDbContext : DbContext

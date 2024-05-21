@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ZamazorWeb.Data;
+using ZamazorWeb.DataAccess.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

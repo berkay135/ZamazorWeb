@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace ZamazorWeb.Migrations
+namespace ZamazorWeb.DataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class AddCategoryTableToDb : Migration

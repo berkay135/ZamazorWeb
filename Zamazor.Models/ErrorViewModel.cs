@@ -1,4 +1,4 @@
-namespace ZamazorWeb.Models
+namespace Zamazor.Models
 {
     public class ErrorViewModel
     {

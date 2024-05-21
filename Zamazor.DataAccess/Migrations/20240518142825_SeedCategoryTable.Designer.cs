@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ZamazorWeb.Data;
+using ZamazorWeb.DataAccess.Data;
 
 #nullable disable
 
-namespace ZamazorWeb.Migrations
+namespace ZamazorWeb.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240518142825_SeedCategoryTable")]
