@@ -11,10 +11,12 @@ namespace ZamazorWeb.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         //Implementation of ApplicatonDbContext
-        public ProductController(IUnitOfWork unitOfWork)
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -69,6 +71,21 @@ namespace ZamazorWeb.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                //get root path
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if(file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwwRootPath, @"images\product");
+
+                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName),FileMode.Create))
+                    {
+                        file.CopyTo(fileStream); 
+                    }
+
+                    productVM.Product.ImageUrl = @"\images\product\" + fileName;
+
+                }
                 _unitOfWork.Product.Add(productVM.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "Product created successfully";
@@ -86,38 +103,6 @@ namespace ZamazorWeb.Areas.Admin.Controllers
 				return View(productVM);
 			}
         }
-        ////implementation of Edit button
-        ////GET
-        //public IActionResult Edit(int? id) //we need id user wants to edit
-        //{
-        //    if (id == null || id == 0)
-        //    {
-        //        return NotFound();
-        //    }
-        //    Product? ProductFromDb = _unitOfWork.Product.Get(u => u.Id == id);
-        //    //Product? ProductFromDb1 = _db.Categories.FirstOrDefault(u => u.Id == id);
-        //    //Product? ProductFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
-
-        //    if (ProductFromDb == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(ProductFromDb);
-        //}
-
-        ////POST
-        //[HttpPost]
-        //public IActionResult Edit(Product obj)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _unitOfWork.Product.Update(obj);
-        //        _unitOfWork.Save();
-        //        TempData["success"] = "Product edited successfully";
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View();
-        //}
 
         //implementation of Delete button
         //GET
