@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Zamazor.DataAccess.Repos.IRepository;
 using Zamazor.Models;
+using Zamazor.Models.ViewModels;
 using ZamazorWeb.DataAccess.Data;
 
 namespace ZamazorWeb.Areas.Admin.Controllers
@@ -16,70 +18,106 @@ namespace ZamazorWeb.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            //Retrieve categories from sql server and pass object to view
+            //Retrieve products from sql server and pass object to view
             List<Product> objProductList = _unitOfWork.Product.GetAll().ToList();
-            return View(objProductList);
+            
+			return View(objProductList);
         }
+        
 
         //Implementation of Create button
         //GET
-        public IActionResult Create()
+        public IActionResult Upsert(int? id) //create and edit combined
         {
-            return View();
+			//projections(converting category to select list item)
+			IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category
+				.GetAll().Select(u => new SelectListItem
+				{
+					Text = u.Name,
+					Value = u.Id.ToString()
+				});
+            //ViewBag.CategoryList = CategoryList; //asp-items="ViewBag.CategoryList"
+            //ViewData["CategoryList"] = CategoryList; //asp-items="@(ViewData["CategoryList"] as IEnumerable<SelectListItem>)"
+            ProductVM productVM = new()
+            {
+                CategoryList = CategoryList,
+                Product = new Product()
+            };
+            if(id == null || id == 0)
+            {
+                //create
+				return View(productVM);
+			}else
+            {
+                //Update
+                productVM.Product = _unitOfWork.Product.Get(u=>u.Id==id); 
+                return View(productVM);
+            }
         }
 
         //Adding new row in database
         //POST
         [HttpPost]
-        public IActionResult Create(Product obj)
+        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
         {
             //server side validation
             //if (obj.Name == obj.DisplayOrder.ToString())
             //{
                 //ModelState.AddModelError("name","The Display Order cannot exactyl match the Name.");
             //}
+            
 
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Add(obj);
+                _unitOfWork.Product.Add(productVM.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "Product created successfully";
                 return RedirectToAction("Index");
             }
-            return View();
-        }
-        //implementation of Edit button
-        //GET
-        public IActionResult Edit(int? id) //we need id user wants to edit
-        {
-            if (id == null || id == 0)
+            else
             {
-                return NotFound();
-            }
-            Product? ProductFromDb = _unitOfWork.Product.Get(u => u.Id == id);
-            //Product? ProductFromDb1 = _db.Categories.FirstOrDefault(u => u.Id == id);
-            //Product? ProductFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
+				//projections(converting category to select list item)
+				productVM.CategoryList = _unitOfWork.Category
+                    .GetAll().Select(u => new SelectListItem
+                    {
+                        Text = u.Name,
+                        Value = u.Id.ToString()
+                    });
+				return View(productVM);
+			}
+        }
+        ////implementation of Edit button
+        ////GET
+        //public IActionResult Edit(int? id) //we need id user wants to edit
+        //{
+        //    if (id == null || id == 0)
+        //    {
+        //        return NotFound();
+        //    }
+        //    Product? ProductFromDb = _unitOfWork.Product.Get(u => u.Id == id);
+        //    //Product? ProductFromDb1 = _db.Categories.FirstOrDefault(u => u.Id == id);
+        //    //Product? ProductFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
 
-            if (ProductFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(ProductFromDb);
-        }
+        //    if (ProductFromDb == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(ProductFromDb);
+        //}
 
-        //POST
-        [HttpPost]
-        public IActionResult Edit(Product obj)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Product.Update(obj);
-                _unitOfWork.Save();
-                TempData["success"] = "Product edited successfully";
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
+        ////POST
+        //[HttpPost]
+        //public IActionResult Edit(Product obj)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _unitOfWork.Product.Update(obj);
+        //        _unitOfWork.Save();
+        //        TempData["success"] = "Product edited successfully";
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View();
+        //}
 
         //implementation of Delete button
         //GET
