@@ -21,7 +21,7 @@ namespace ZamazorWeb.Areas.Admin.Controllers
         public IActionResult Index()
         {
             //Retrieve products from sql server and pass object to view
-            List<Product> objProductList = _unitOfWork.Product.GetAll().ToList();
+            List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties:"Category").ToList();
             
 			return View(objProductList);
         }
@@ -78,6 +78,18 @@ namespace ZamazorWeb.Areas.Admin.Controllers
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                     string productPath = Path.Combine(wwwRootPath, @"images\product");
 
+                    if(!string.IsNullOrEmpty(productVM.Product.ImageUrl)) 
+                    {
+                        //delete the old image
+                        var oldImagePath = 
+                            Path.Combine(wwwRootPath,productVM.Product.ImageUrl.TrimStart('\\'));
+
+                        if(System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
                     using (var fileStream = new FileStream(Path.Combine(productPath, fileName),FileMode.Create))
                     {
                         file.CopyTo(fileStream); 
@@ -86,7 +98,15 @@ namespace ZamazorWeb.Areas.Admin.Controllers
                     productVM.Product.ImageUrl = @"\images\product\" + fileName;
 
                 }
-                _unitOfWork.Product.Add(productVM.Product);
+                if(productVM.Product.Id == 0)
+                {
+					_unitOfWork.Product.Add(productVM.Product);
+                }
+                else
+                {
+					_unitOfWork.Product.Update(productVM.Product);
+				}
+                
                 _unitOfWork.Save();
                 TempData["success"] = "Product created successfully";
                 return RedirectToAction("Index");
