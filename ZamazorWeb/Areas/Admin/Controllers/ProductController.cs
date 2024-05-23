@@ -124,24 +124,24 @@ namespace ZamazorWeb.Areas.Admin.Controllers
 			}
         }
 
-        //implementation of Delete button
-        //GET
-        public IActionResult Delete(int? id) //we need id user wants to edit
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            Product? ProductFromDb = _unitOfWork.Product.Get(u => u.Id == id);
-            //Product? ProductFromDb1 = _db.Categories.FirstOrDefault(u => u.Id == id);
-            //Product? ProductFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
+        ////implementation of Delete button
+        ////GET
+        //public IActionResult Delete(int? id) //we need id user wants to edit
+        //{
+        //    if (id == null || id == 0)
+        //    {
+        //        return NotFound();
+        //    }
+        //    Product? ProductFromDb = _unitOfWork.Product.Get(u => u.Id == id);
+        //    //Product? ProductFromDb1 = _db.Categories.FirstOrDefault(u => u.Id == id);
+        //    //Product? ProductFromDb2 = _db.Categories.Where(u => u.Id == id).FirstOrDefault();
 
-            if (ProductFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(ProductFromDb);
-        }
+        //    if (ProductFromDb == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(ProductFromDb);
+        //}
 
         //POST
         [HttpPost, ActionName("Delete")]
@@ -167,5 +167,34 @@ namespace ZamazorWeb.Areas.Admin.Controllers
         }
 
         #endregion
-    }
+
+        #region API CALLS
+
+        [HttpDelete]
+		public IActionResult Delete(int? id)
+		{
+            var productToBeDeleted = _unitOfWork.Product.Get(u =>u.Id == id);
+
+            if (productToBeDeleted == null)
+            {
+                return Json(new {success = false, message = "Error while deleting"});
+            }
+
+			//delete the old image
+			var oldImagePath =
+				Path.Combine(_webHostEnvironment.WebRootPath, 
+                productToBeDeleted.ImageUrl.TrimStart('\\'));
+
+			if (System.IO.File.Exists(oldImagePath))
+			{
+				System.IO.File.Delete(oldImagePath);
+			}
+            _unitOfWork.Product.Remove(productToBeDeleted);
+            _unitOfWork.Save();
+
+			return Json(new {success = true, message = "Delete Successful"});
+		}
+
+		#endregion
+	}
 }
