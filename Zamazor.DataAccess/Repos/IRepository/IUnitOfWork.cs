@@ -11,7 +11,8 @@ namespace Zamazor.DataAccess.Repos.IRepository
 
 		ICategoryRepository Category { get; }
 		IProductRepository Product { get; }
+        ICompanyRepository Company { get; }
 
-		void Save();
+        void Save();
 	}
 }

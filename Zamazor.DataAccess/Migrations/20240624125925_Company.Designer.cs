@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZamazorWeb.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using ZamazorWeb.DataAccess.Data;
 namespace Zamazor.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240624125925_Company")]
+    partial class Company
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -300,28 +303,6 @@ namespace Zamazor.DataAccess.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Companies");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            City = "Tech City",
-                            Name = "Texh Solution",
-                            PhoneNumber = "089999999",
-                            PostalCode = "12121",
-                            State = "IL",
-                            StreetAddress = "123 Tech St"
-                        },
-                        new
-                        {
-                            id = 2,
-                            City = "Vid City",
-                            Name = "Vivid Books",
-                            PhoneNumber = "089999777",
-                            PostalCode = "666666",
-                            State = "IL",
-                            StreetAddress = "99 Tech St"
-                        });
                 });
 
             modelBuilder.Entity("Zamazor.Models.Product", b =>
@@ -467,9 +448,6 @@ namespace Zamazor.DataAccess.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -482,8 +460,6 @@ namespace Zamazor.DataAccess.Migrations
 
                     b.Property<string>("StreetAdress")
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -548,15 +524,6 @@ namespace Zamazor.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Zamazor.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("Zamazor.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
                 });
 #pragma warning restore 612, 618
         }

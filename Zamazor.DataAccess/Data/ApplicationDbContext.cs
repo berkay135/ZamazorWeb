@@ -20,6 +20,7 @@ namespace ZamazorWeb.DataAccess.Data
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
+        public DbSet<Company> Companies { get; set; }
 
         //Seed data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,6 +30,29 @@ namespace ZamazorWeb.DataAccess.Data
                 new Category { Id = 1, Name = "Action", DisplayOrder = 1},
                 new Category { Id = 2, Name = "SciFi", DisplayOrder = 2 },
                 new Category { Id = 3, Name = "History", DisplayOrder = 3 }
+                );
+
+            modelBuilder.Entity<Company>().HasData(
+                new Company
+                {
+                    id = 1,
+                    Name = "Texh Solution",
+                    StreetAddress = "123 Tech St",
+                    City = "Tech City",
+                    PostalCode = "12121",
+                    State = "IL",
+                    PhoneNumber = "089999999"
+                },
+                new Company
+                {
+                    id = 2,
+                    Name = "Vivid Books",
+                    StreetAddress = "99 Tech St",
+                    City = "Vid City",
+                    PostalCode = "666666",
+                    State = "IL",
+                    PhoneNumber = "089999777"
+                }
                 );
 
             modelBuilder.Entity<Product>().HasData(
