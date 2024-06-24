@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Zamazor.DataAccess\Zamazor.DataAccess.csproj" />
+    <ProjectReference Include="..\Zamazor.Utility\Zamazor.Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>

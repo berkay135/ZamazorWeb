@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Zamazor.Models;
 
 namespace ZamazorWeb.DataAccess.Data
 {
     //Configuration for entity framework core
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -16,6 +17,9 @@ namespace ZamazorWeb.DataAccess.Data
         public DbSet<Category> Categories { get; set; }
         //Create table named "Products"
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
 
         //Seed data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
