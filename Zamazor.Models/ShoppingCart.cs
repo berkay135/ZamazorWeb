@@ -22,9 +22,12 @@ namespace Zamazor.Models
         public int Count { get; set; }
         public string ApplicationUserId { get; set; }
 
-        [ForeignKey("ProductId")]
+        [ForeignKey("ApplicationUserId")]
         [ValidateNever]
         public ApplicationUser ApplicationUser { get; set; }
+
+        [NotMapped]
+        public double Price { get; set; }   
 
     }
 }

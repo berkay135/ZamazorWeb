@@ -22,6 +22,8 @@ namespace ZamazorWeb.DataAccess.Data
 
         public DbSet<Company> Companies { get; set; }
 
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+
         //Seed data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
